@@ -5,6 +5,7 @@ use std::process;
 fn match_pattern(input_line: &str, pattern: &str) -> bool {
     match pattern {
         _ if pattern.chars().count() == 1 => input_line.contains(pattern),
+        "\\w" => input_line.chars().any(|c| c.is_alphanumeric()),
         "\\d" => input_line.chars().any(|c| c.is_ascii_digit()),
         _ => panic!("Pattern not found: {}", pattern),
     }
