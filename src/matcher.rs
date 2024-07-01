@@ -34,6 +34,7 @@ pub fn build_patterns(pattern: &str) -> Vec<Pattern> {
                     patterns.push(Pattern::PositiveCharGroup(char_group));
                 }
             }
+            '$' => patterns.push(Pattern::EndOfLine),
             _ => patterns.push(Pattern::Literal(c)),
         }
     }
@@ -48,8 +49,9 @@ pub fn match_pattern(input_line: &str, pattern: &str) -> bool {
     while chars.clone().next().is_some() {
         let mut char_pos = chars.clone();
         let is_start = input_line.starts_with(char_pos.as_str());
+        let is_end = input_line.ends_with(char_pos.as_str());
 
-        if patterns.iter().all(|p| p.matches(&mut char_pos, is_start)) {
+        if patterns.iter().all(|p| p.matches(&mut char_pos, is_start, is_end)) {
             return true;
         }
         chars.next();
