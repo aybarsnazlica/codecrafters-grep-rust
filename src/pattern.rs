@@ -47,8 +47,10 @@ impl Pattern {
         }
     }
 
-    pub fn matches(&self, chars: &mut Chars, is_start: bool, is_end) -> bool {
+    pub fn matches(&self, chars: &mut Chars, is_start: bool, is_end: bool) -> bool {
         match self {
+            Pattern::StartOfLine => is_start,
+            Pattern::EndOfLine => is_end && chars.clone().next().is_none(),
             Pattern::Literal(literal) => Pattern::match_literal(chars, *literal),
             Pattern::Digit => Pattern::match_digit(chars),
             Pattern::Alphanumeric => Pattern::match_alphanumeric(chars),
@@ -58,8 +60,6 @@ impl Pattern {
             Pattern::NegativeCharGroup(char_group) => {
                 Pattern::match_negative_char_group(chars, char_group)
             }
-            Pattern::StartOfLine => is_start,
-            Pattern::EndOfLine => is_end,
         }
     }
 }

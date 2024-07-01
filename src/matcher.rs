@@ -7,6 +7,7 @@ pub fn build_patterns(pattern: &str) -> Vec<Pattern> {
     while let Some(c) = chars.next() {
         match c {
             '^' => patterns.push(Pattern::StartOfLine),
+            '$' => patterns.push(Pattern::EndOfLine),
             '\\' => match chars.next() {
                 Some('d') => patterns.push(Pattern::Digit),
                 Some('w') => patterns.push(Pattern::Alphanumeric),
@@ -34,7 +35,6 @@ pub fn build_patterns(pattern: &str) -> Vec<Pattern> {
                     patterns.push(Pattern::PositiveCharGroup(char_group));
                 }
             }
-            '$' => patterns.push(Pattern::EndOfLine),
             _ => patterns.push(Pattern::Literal(c)),
         }
     }
