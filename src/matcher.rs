@@ -6,6 +6,7 @@ pub fn build_patterns(pattern: &str) -> Vec<Pattern> {
 
     while let Some(c) = chars.next() {
         match c {
+            '^' => patterns.push(Pattern::StartOfLine),
             '\\' => match chars.next() {
                 Some('d') => patterns.push(Pattern::Digit),
                 Some('w') => patterns.push(Pattern::Alphanumeric),
@@ -46,7 +47,9 @@ pub fn match_pattern(input_line: &str, pattern: &str) -> bool {
 
     while chars.clone().next().is_some() {
         let mut char_pos = chars.clone();
-        if patterns.iter().all(|p| p.matches(&mut char_pos)) {
+        let is_start = input_line.starts_with(char_pos.as_str());
+
+        if patterns.iter().all(|p| p.matches(&mut char_pos, is_start)) {
             return true;
         }
         chars.next();

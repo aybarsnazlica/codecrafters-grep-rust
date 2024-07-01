@@ -7,6 +7,7 @@ pub enum Pattern {
     Alphanumeric,
     PositiveCharGroup(String),
     NegativeCharGroup(String),
+    StartOfLine,
 }
 
 impl Pattern {
@@ -45,7 +46,7 @@ impl Pattern {
         }
     }
 
-    pub fn matches(&self, chars: &mut Chars) -> bool {
+    pub fn matches(&self, chars: &mut Chars, is_start: bool) -> bool {
         match self {
             Pattern::Literal(literal) => Pattern::match_literal(chars, *literal),
             Pattern::Digit => Pattern::match_digit(chars),
@@ -56,6 +57,7 @@ impl Pattern {
             Pattern::NegativeCharGroup(char_group) => {
                 Pattern::match_negative_char_group(chars, char_group)
             }
+            Pattern::StartOfLine => is_start,
         }
     }
 }
